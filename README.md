@@ -27,7 +27,7 @@ Here's a sneak peek of how it's looking!
 * **Multer** (The middleware for handling file uploads from the user)
 * **Cloudinary** (The cloud service for storing and serving the uploaded images)
 
-## ✨ Features (Currently Under Development)
+## Features (Currently Under Development)
 
 * **Real-Time Messaging:** Instantly send and receive text and image messages.
 * **User Authentication:** Secure signup and login system using JWTs and `HttpOnly` cookies.
@@ -39,7 +39,7 @@ Here's a sneak peek of how it's looking!
 
 ---
 
-## 🚀 How to Run Locally
+## How to Run Locally
 
 Follow these instructions to get the project running on your local machine.
 
@@ -80,7 +80,7 @@ Open a new terminal and navigate to the `client` directory.
 
 ---
 
-## 👀 A Few Glimpses
+## A Few Glimpses
 
 [![Login Page](demo/login.png)](demo/login.png)
 **Login**
