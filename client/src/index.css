@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+
+
+body{
+    @apply bg-[#181A1B] text-white;
+    font-family: "Roboto", ui-sans-serif;
+}
+.logo{
+    font-family: "Unbounded","Special Gothic Expanded One", sans-serif;
+}
+dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+}
+dialog::backdrop {
+  background-color: rgba(255, 255, 255, 0.622); 
+  backdrop-filter: blur(3px);
+}
+
+input{
+    @apply bg-[#2B2A33] border-[#373c3e] text-white ;
+    border-radius: .15rem;
+  border-width: 1px;
+  padding: .375rem .5rem;
+  outline: 2px solid transparent;
+}
+input::placeholder{
+    font-size: 0.9rem;
+}
