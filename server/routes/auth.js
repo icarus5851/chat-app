@@ -16,9 +16,13 @@ router.post('/signup',async (req,res)=>{
 
         const newuser = new User({name,email,password:hashpw})
         await newuser.save()
-        const token = jwt.sign({id:newuser._id , name:newuser.name, email:newuser.email}, process.env.JWT_ACCESS);
+        const token = jwt.sign(
+            {id:newuser._id , name:newuser.name, email:newuser.email},
+            process.env.JWT_ACCESS,
+            { expiresIn: '10d' }
+        );
         res.cookie('token', token, {httpOnly: true, secure: process.env.NODE_ENV === 'production', 
-            sameSite: 'strict',  maxAge: 24 * 60 * 60 * 1000 });
+            sameSite: 'strict',  maxAge: 10*24 * 60 * 60 * 1000 });
         res.status(201).json({message:"signup successful"});
     }
     catch(err){
@@ -39,9 +43,9 @@ router.post('/login', async (req,res)=>{
         if(!isCorrect){
            return res.status(400).json({message:"Invalid credentials"})
         }
-        const token = jwt.sign({id:existingUser._id , name:existingUser.name, email:existingUser.email}, process.env.JWT_ACCESS);
+        const token = jwt.sign({id:existingUser._id , name:existingUser.name, email:existingUser.email}, process.env.JWT_ACCESS,{ expiresIn: '10d' });
         res.cookie('token', token, {httpOnly: true, secure: false, 
-            sameSite: 'strict',  maxAge: 24 * 60 * 60 * 1000 });
+            sameSite: 'strict',  maxAge: 10*24 * 60 * 60 * 1000 });
         res.status(201).json({message:"Login successful"});
     }
     catch(err){

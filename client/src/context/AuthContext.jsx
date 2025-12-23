@@ -8,27 +8,32 @@ export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const checkLoggedIn = async () => {
-            try {
-                const response = await api.get('/profile');
-                setCurrentUser(response.data.user);
-                socket.connect();
-            } catch (error) {
-                setCurrentUser(null);
-                socket.disconnect();
-            } finally {
-                setLoading(false);
-            }
-        };
+    const refreshUser = async () => {
+        setLoading(true);
+        try {
+            const response = await api.get('/profile');
+            const user = response.data.user; 
+            setCurrentUser(user);
+            socket.connect();
+            socket.emit('join_user_room', user._id);
+        } catch (error) {
+            setCurrentUser(null);
+            socket.disconnect();
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        checkLoggedIn();
-    }, []); 
+    useEffect(() => {
+        refreshUser();
+    }, []);
 
     const value = {
         currentUser,
         setCurrentUser,
+        refreshUser,     
         isAuthenticated: !!currentUser,
+        loading,
     };
 
     return (
@@ -38,7 +43,4 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-
-export const useAuth = () => {
-    return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);

@@ -12,9 +12,25 @@ const chatSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "Message",
     },
+    //group
+    isGroup: {
+        type: Boolean,
+        default: false,
+    },
+    groupName: {
+        type: String,
+        trim: true,
+    },
+    groupPic: {
+        type: String,
+        default: "", 
+    },
+    groupAdmin: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }
   },
   { timestamps: true }
 );
 
-
-module.exports = mongoose.model("Chat",chatSchema);
+module.exports = mongoose.model("Chat", chatSchema);

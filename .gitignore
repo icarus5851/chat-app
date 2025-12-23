@@ -12,3 +12,5 @@ server/.env
 
 dist/
 build/
+
+server/chatapp-backup.gz

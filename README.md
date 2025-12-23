@@ -1,100 +1,118 @@
-# PingChat - A Real-Time Messaging App (Work in Progress)
+# PingChat - Real-Time Messaging App
 
-A full-stack chat application built with Node.js, Express, React, and MongoDB, featuring live messaging with Socket.IO.
-
-Here's a sneak peek of how it's looking!
-
-[![PingChat Demo](demo/chatwindow.png)](demo/chatwindow.png)
+A full-stack, real-time chat application built to provide seamless communication. It utilizes a modern tech stack featuring Node.js, Express, React, and MongoDB, with live messaging powered by Socket.IO.
 
 ---
 
-### Tech Stack
+## 🚀 Tech Stack
 
-#### Frontend
-* **React** (For building the user interface with components)
-* **React Router** (For handling client-side navigation between pages like `/login`, `/chats`, `/profile`)
-* **Tailwind CSS** (For rapid, utility-first styling)
-* **Socket.IO Client** (To connect to the server for real-time communication)
-* **Axios** (To make HTTP requests to the backend API)
+### Frontend
+* **React** - Component-based UI library.
+* **React Router** - For client-side navigation (`/login`, `/chats`, etc.).
+* **Tailwind CSS** - Utility-first framework for rapid and responsive styling.
+* **Socket.IO Client** - Enables real-time, bidirectional communication.
+* **Axios** - For handling HTTP requests to the backend.
 
-#### Backend
-* **Node.js** (The JavaScript runtime environment that runs the server)
-* **Express.js** (The web framework used to build your API, routes, and middleware)
-* **Socket.IO** (To manage the real-time, live connection for the chat)
-* **Mongoose** (To create schemas and interact with the MongoDB database easily)
-* **JSON Web Token (JWT)** (For creating secure access tokens for user authentication)
-* **Bcrypt.js** (For hashing user passwords securely before saving them)
-* **Multer** (The middleware for handling file uploads from the user)
-* **Cloudinary** (The cloud service for storing and serving the uploaded images)
-
-## Features (Currently Under Development)
-
-* **Real-Time Messaging:** Instantly send and receive text and image messages.
-* **User Authentication:** Secure signup and login system using JWTs and `HttpOnly` cookies.
-* **Find & Chat:** Search for other registered users by name or email to start new conversations.
-* **Profile Management:** Update your user profile, including your name, email, password, and avatar.
-* **Message Actions:** Send Images and Delete(unsend) your own messages.
-
-**Note:** Hey, this project is a work-in-progress and more features will be added by me. This commit represents the current state of the application.
+### Backend
+* **Node.js** - JavaScript runtime for the server.
+* **Express.js** - Framework for building RESTful APIs.
+* **Socket.IO** - Manages real-time WebSockets for instant messaging, read receipts, and online status.
+* **Mongoose** - ODM for interacting with MongoDB.
+* **JWT (JSON Web Tokens)** - Secure stateless authentication (using `JWT_ACCESS`).
+* **Multer** - Middleware for handling file uploads.
+* **Cloudinary** - Cloud storage service for profile pictures and media.
 
 ---
 
-## How to Run Locally
+## ✨ Features
 
-Follow these instructions to get the project running on your local machine.
+* **⚡ Real-Time Messaging:** Instant delivery of text messages via Socket.IO.
+* **🔐 Secure Authentication:** Full Signup/Login system using JWTs stored in `HttpOnly` cookies.
+* **👥 Group Chats:** Create groups, add/remove members, and manage group admins.
+* **👀 Read Receipts:** Real-time double-tick updates when messages are read.
+* **👤 Profile Management:** Update personal details, change passwords, and upload custom avatars.
+* **🖼️ Media Sharing:** Send and receive images seamlessly within chats.
+* **📱 Responsive UI:** Fully optimized interface for both desktop and mobile devices.
+* **💾 Message Actions:** Support for replying to messages, forwarding, and deleting.
 
-#### **Prerequisites**
-* [Node.js](https://nodejs.org/) installed
-* [MongoDB](https://www.mongodb.com/) installed and running
-* A free [Cloudinary](https://cloudinary.com/) account for image uploads
+---
 
-#### **1. Backend Setup**
+## 🛠️ Installation & Local Setup
 
-First, navigate into the `server` directory.
+Follow these steps to run the project locally on your machine.
 
-1.  Install dependencies:
+### Prerequisites
+* [Node.js](https://nodejs.org/) installed.
+* [MongoDB](https://www.mongodb.com/) installed or a MongoDB Atlas URI.
+* A [Cloudinary](https://cloudinary.com/) account for image storage.
+
+### 1. Backend Setup
+
+1.  Navigate to the server directory:
+    ```bash
+    cd server
+    ```
+2.  Install dependencies:
     ```bash
     npm install
     ```
-2.  Create a `.env` file by copying `.env.example`. Then, fill in your MongoDB connection string, JWT secret, and Cloudinary credentials.
-3.  Start the backend server:
+3.  **Environment Variables:** Create a `.env` file in the `server` folder and add the following:
+    ```env
+    # Database Connection
+    MONGO_URI=your_mongodb_connection_string
+
+    # Security
+    JWT_ACCESS=your_strong_secret_key_for_jwt
+
+    # Server Configuration
+    PORT=5000
+    FRONTEND_URL=http://localhost:5173
+
+    # Cloudinary Credentials (for image uploads)
+    CLOUDINARY_CLOUD_NAME=your_cloud_name
+    CLOUDINARY_API_KEY=your_api_key
+    CLOUDINARY_API_SECRET=your_api_secret
+    ```
+4.  Start the backend server:
     ```bash
     npm run dev
     ```
-    The backend will be running on `http://localhost:5000` (or your specified port).
+    The server should be running on `http://localhost:5000`.
 
-#### **2. Frontend Setup**
+### 2. Frontend Setup
 
-Open a new terminal and navigate to the `client` directory.
-
-1.  Install dependencies:
+1.  Navigate to the client directory:
+    ```bash
+    cd client
+    ```
+2.  Install dependencies:
     ```bash
     npm install
     ```
-2.  Create a `.env` file by copying `.env.example`. The API URL should be correctly set for you.
-3.  Start the frontend development server:
+3.  **Environment Variables:** Create a `.env` file in the `client` folder:
+    ```env
+    # Point this to your backend server URL
+    VITE_API_URL=http://localhost:5000
+    ```
+4.  Start the frontend application:
     ```bash
     npm run dev
     ```
-    The application will be available at `http://localhost:5173` (usually).
+    The app should now be running at `http://localhost:5173`.
 
 ---
 
-## A Few Glimpses
+## 🚀 Deployment
 
-[![Login Page](demo/login.png)](demo/login.png)
-**Login**
+This project is ready for deployment.
 
-[![Signup Page](demo/signup.png)](demo/signup.png)
-**Create Account**
+* **Frontend:** Can be deployed to services like **Vercel** or **Netlify**.
+* **Backend:** Can be deployed to **Render**, **Railway**, or **Heroku**.
+* **Database:** **MongoDB Atlas** is recommended for the database.
 
-[![Chat Search](demo/chatsearch.png)](demo/chatsearch.png)
-**Find users or start a new chat**
+**⚠️ Important Note for Deployment:**
+When deploying, ensure you update the `FRONTEND_URL` in your backend environment variables to match your deployed frontend domain (e.g., `https://your-app.vercel.app`) to avoid CORS issues.
 
-[![Chat Window](demo/chatwindow.png)](demo/chatwindow.png)
-**Live Conversations**
+---
 
-[![Profile Page](demo/profile.png)](demo/profile.png)
-**Manage Your Profile**
-
-**Thanks for checking out this work in progress! More improvements are on the way.**
+**PingChat** &copy; 2025. Built with ❤️ and JavaScript.

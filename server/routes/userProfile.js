@@ -91,4 +91,27 @@ router.post('/profile/pfp', authToken , upload.single('pfp'), async (req,res)=>{
         res.status(500).json({ error: 'Server error while updating avatar.' });
     }
 });
+
+router.delete('/profile/pfp', authToken, async (req, res) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user.id,
+            { $unset: { profilePic: "" } }, 
+            { new: true, select: '-password' }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        res.json({
+            message: 'Avatar removed successfully.',
+            user: updatedUser,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error while removing avatar.' });
+    }
+});
+
 module.exports = router;
