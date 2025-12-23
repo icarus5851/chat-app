@@ -69,6 +69,23 @@ function ChatWindow({ selectedChat, onNewMessage, onChatStarted, onChatRemoved, 
     const inputRef = useRef(null); 
     const isInitialLoad = useRef(true);
     const closeTimeoutRef = useRef(null); 
+    const isSending = useRef(false); 
+
+    useEffect(() => {
+        if (window.innerWidth < 768) {
+            window.history.pushState({ chatOpen: true }, "");
+        }
+
+        const handlePopState = (event) => {
+            if (window.innerWidth < 768) {
+                event.preventDefault();
+                onBack(); 
+            }
+        };
+
+        window.addEventListener("popstate", handlePopState);
+        return () => window.removeEventListener("popstate", handlePopState);
+    }, []);
 
     useEffect(() => {
         if (selectedChat) {
@@ -166,13 +183,34 @@ function ChatWindow({ selectedChat, onNewMessage, onChatStarted, onChatRemoved, 
     const handleEmojiClick = (emojiData) => { setNewMessageContent(prev => prev + emojiData.emoji); };
 
     const handleSendMessage = async (e) => {
-        e?.preventDefault(); if (!newMessageContent.trim()) return;
-        const payload = { content: newMessageContent, replyTo: replyingTo ? replyingTo._id : null };
-        if (selectedChat.isTemp) {
-            const partner = selectedChat.participants.find(p => p._id !== currentUser._id);
-            try { const res = await api.post('/chat', { userId: partner._id }); const realChat = res.data; onChatStarted(realChat); await api.post('/messages', { chatId: realChat._id, ...payload }); } catch(err) { console.error(err); }
-        } else { try { await api.post('/messages', { chatId: selectedChat._id, ...payload }); } catch (err) { console.error(err); } }
-        setNewMessageContent(''); setReplyingTo(null); setShowEmojiPicker(false); setTimeout(smoothScrollToBottom, 50);
+        e?.preventDefault(); 
+        
+        const contentToSend = newMessageContent.trim();
+        if (!contentToSend || isSending.current) return;
+
+        setNewMessageContent(''); 
+        setReplyingTo(null); 
+        setShowEmojiPicker(false); 
+        isSending.current = true; // Lock sending
+
+        const payload = { content: contentToSend, replyTo: replyingTo ? replyingTo._id : null };
+        
+        try {
+            if (selectedChat.isTemp) {
+                const partner = selectedChat.participants.find(p => p._id !== currentUser._id);
+                const res = await api.post('/chat', { userId: partner._id }); 
+                const realChat = res.data; 
+                onChatStarted(realChat); 
+                await api.post('/messages', { chatId: realChat._id, ...payload });
+            } else { 
+                await api.post('/messages', { chatId: selectedChat._id, ...payload }); 
+            }
+            setTimeout(smoothScrollToBottom, 50);
+        } catch (err) { 
+            console.error(err); 
+        } finally {
+            isSending.current = false; 
+        }
     };
 
     const handleFileChange = async (e) => {
@@ -229,7 +267,7 @@ function ChatWindow({ selectedChat, onNewMessage, onChatStarted, onChatRemoved, 
     }, [selectedChat, onNewMessage, currentUser]); 
 
     if (!selectedChat) return (
-        <div className="flex flex-col h-full w-full justify-center items-center bg-doodle-pattern text-zinc-500 gap-4">
+        <div className="flex flex-col h-[100dvh] w-full justify-center items-center bg-doodle-pattern text-zinc-500 gap-4">
             <div className="w-20 h-20 rounded-full bg-zinc-800/50 animate-pulse flex items-center justify-center">
                 <MdGroup size={40} className="opacity-20"/>
             </div>
@@ -247,13 +285,13 @@ function ChatWindow({ selectedChat, onNewMessage, onChatStarted, onChatRemoved, 
     let lastMessageDate = null;
 
     return (
-        <div className="flex h-full w-full relative overflow-hidden">
+        <div className="flex h-[100dvh] w-full relative overflow-hidden">
             <div className="flex flex-col h-full bg-doodle-pattern flex-1 min-w-0 relative">
                 
                 {/* Header */}
                 <div className='flex justify-between items-center border-b border-zinc-800 bg-[#181A1B] z-10 relative h-[70px] shrink-0'>
                      <div className="flex items-center flex-1 min-w-0">
-                        <button onClick={onBack} className="md:hidden p-3 text-zinc-400 hover:text-white"><IoArrowBack size={24}/></button>
+                        <button onClick={() => { if(window.innerWidth < 768) window.history.back(); else onBack(); }} className="md:hidden p-3 text-zinc-400 hover:text-white"><IoArrowBack size={24}/></button>
                         <button onClick={() => setIsDetailsOpen(true)} className="p-3 flex items-center gap-3 hover:bg-zinc-800/50 rounded-lg transition-all ml-1 flex-1 min-w-0 justify-start">
                             <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold shrink-0 bg-purple-400`}>
                                 {headerPic ? <img src={headerPic} alt="Avatar" className="w-full h-full rounded-full object-cover" /> :  headerName[0]?.toUpperCase()}
@@ -305,7 +343,6 @@ function ChatWindow({ selectedChat, onNewMessage, onChatStarted, onChatRemoved, 
                     </div>
                 ) : (
                     <div className="chat-input-area p-3 sm:p-4 flex flex-col gap-2 border-t border-zinc-700 bg-[#181A1B] z-10 relative">
-                            
                             {showEmojiPicker && (
                                 <div className="absolute bottom-full left-2 sm:left-4 mb-2 z-50 shadow-2xl rounded-2xl overflow-hidden w-[95vw] sm:w-[350px]">
                                     <EmojiPicker 
