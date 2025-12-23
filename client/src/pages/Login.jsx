@@ -34,7 +34,7 @@ function Login() {
     return (
     <div className='flex justify-center'>
         <div className='h-screen w-full sm:w-3/5 md:w-1/2 lg:w-2/5  px-5 flex flex-col justify-center items-center'>
-            <div className='text-3xl font-bold logo mb-12 text-center'>Ping <span className='text-[#8675e1]'>Chat.</span></div>
+            <div className='text-3xl font-bold logo mb-12 text-center'>P<span className='text-[#8675e1]'>C.</span></div>
             
             <div className='flex flex-col justify-center items-center  gap-3'>
                 <div className='text-3xl sm:text-5xl font-bold'>Welcome Back</div>
