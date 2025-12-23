@@ -66,6 +66,10 @@ io.on('connection',socket=>{
     })
 })
 
+app.get("/", (req, res) => {
+    res.status(200).send("PingChat Backend is Live!");
+});
+
 app.use(cors({origin: process.env.FRONTEND_URL,credentials: true,}));
 app.use(express.json()); 
 app.use(cookieParser())
